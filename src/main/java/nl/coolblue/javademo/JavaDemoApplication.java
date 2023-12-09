@@ -23,13 +23,15 @@ public class JavaDemoApplication {
 
         // metrics client
         Metrics metrics = new StatsDMetrics(statsDClient);
+        var telemetry = new MonitoringEvents(logger, metrics);
         // define tags array for metric
         var tagsBuilder = Tags.success().withEnv("prod").withService("JavaDemo").withVersion("1.0.0");
         var tags = tagsBuilder.build();
         // send metric
-        metrics.event("Java Demo app started", "Running in prod", tags);
-        metrics.histogram("app_started", 1L, tags);
-        logger.info("Java Demo app starting!!!");
+        telemetry.getMetrics().event("Java Demo app started", "Running in prod", tags);
+        telemetry.getMetrics().histogram("app_started", 1L, tags);
+        telemetry.getLogger().info("Java Demo app starting!!!");
+        
         SpringApplication.run(JavaDemoApplication.class, args);
         
     }
