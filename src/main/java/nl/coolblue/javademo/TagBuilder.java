@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TagBuilder {
-    protected String success = "success";
+    protected String result = "success";
     protected List<String> tags = new ArrayList<>();
     public abstract TagBuilder withTag(String tag, String value);
     public abstract TagBuilder withTag(String tag, int value);
@@ -15,11 +15,10 @@ public abstract class TagBuilder {
     public abstract TagBuilder asFailure();
     public String[] build() {
         String[] ts = new String[tags.size() + 1];
-        ts[0] = "result:" + success.toLowerCase();
+        ts[0] = "result:" + result;
         System.arraycopy(tags.toArray(new String[0]), 0, ts, 1, tags.size());
         return ts;
     }
-
 
     public static class Tags extends TagBuilder {
 
@@ -33,31 +32,32 @@ public abstract class TagBuilder {
 
         private Tags(boolean success) {
             if(success)
-                this.success = "success";
+                this.result = "success";
             else 
-                this.success = "failure";
+                this.result = "failure";
         }
 
-        public static String clean(String input) {
-            // Lowercase the input
-            String lowercaseInput = input.toLowerCase();
-
+        public static String clean(final String input) {
+            
             // Remove leading numbers and special characters
-            String trimmedInput = lowercaseInput.replaceAll("^[^a-zA-Z0-9]*", "");
+            String cleanedInput = input.replaceAll("^[^a-zA-Z0-9]*", "");
 
             // Remove trailing special characters
-            trimmedInput = trimmedInput.replaceAll("[^a-zA-Z0-9]*$", "");
+            cleanedInput = cleanedInput.replaceAll("[^a-zA-Z0-9]*$", "");
 
             // Remove special characters (except numbers, dash, underscore, period, and space)
-            String cleanedInput = trimmedInput.replaceAll("[^a-zA-Z0-9-_. ]", "");
+            cleanedInput = cleanedInput.replaceAll("[^a-zA-Z0-9-_. ]", "");
 
             // Convert camel case to kebab case
-            String kebabCaseInput = cleanedInput.replaceAll("([a-z])([A-Z])", "$1-$2");
+            cleanedInput = cleanedInput.replaceAll("([a-z])([A-Z])", "$1-$2");
 
+            // Lowercase the input
+            cleanedInput = cleanedInput.toLowerCase();
+            
             // Convert spaces, underscores, and periods to kebab case
-            kebabCaseInput = kebabCaseInput.replaceAll("[ _\\.]", "-");
+            cleanedInput = cleanedInput.replaceAll("[ _\\.]", "-");
 
-            return kebabCaseInput;
+            return cleanedInput;
         }
         
         @Override
@@ -94,7 +94,7 @@ public abstract class TagBuilder {
 
         @Override
         public TagBuilder asFailure() {
-            success = "failure";
+            result = "failure";
             return this;
         }
 
