@@ -5,11 +5,14 @@ import com.timgroup.statsd.StatsDClient;
 import nl.coolblue.javademo.TagBuilder.Tags;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
 public class JavaDemoApplication {
     static String domain = "demo";
     static String app = "java-demo";
+    static Logger logger = LoggerFactory.getLogger(JavaDemoApplication.class);
     public static void main(String[] args) {
         var ns = String.format("%s.%s", domain, app);
         StatsDClient statsDClient = new NonBlockingStatsDClientBuilder()
@@ -26,7 +29,7 @@ public class JavaDemoApplication {
         // send metric
         metrics.event("Java Demo app started", "Running in prod", tags);
         metrics.histogram("app_started", 1L, tags);
-
+        logger.info("Java Demo app starting!!!");
         SpringApplication.run(JavaDemoApplication.class, args);
         
     }
