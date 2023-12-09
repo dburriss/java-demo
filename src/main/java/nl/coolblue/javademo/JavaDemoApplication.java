@@ -22,6 +22,8 @@ public class JavaDemoApplication {
         // define tags array for metric
         String[] tags = {"env:prod", "service:java-demo", "version:1.0.0"};
         // send metric
+        var ev = com.timgroup.statsd.Event.builder().withTitle("Java Demo App Started").withText("Prod started").build();
+        client.recordEvent(ev, tags);
         client.histogram("app_started", 1L, tags);
         
         SpringApplication.run(JavaDemoApplication.class, args);
