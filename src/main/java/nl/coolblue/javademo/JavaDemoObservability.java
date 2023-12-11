@@ -53,4 +53,10 @@ public class JavaDemoObservability {
         // send log
         monitoringEvents.getLogger().info("Java Demo app starting!!!");
     }
+
+    public AutoCloseable timeHelloQuery() {
+        var tags = TagBuilder.Tags.success();
+        addDefaultTags(tags);
+        return monitoringEvents.getMetrics().startTimer("helloQuery", tags.build());
+    }
 }
