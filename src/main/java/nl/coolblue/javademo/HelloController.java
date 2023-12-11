@@ -2,6 +2,7 @@ package nl.coolblue.javademo;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 @RestController
 public class HelloController {
 
@@ -13,6 +14,7 @@ public class HelloController {
     @GetMapping("/")
     public String index() {
         String result = "";
+        // example of a custom metric timer
         try(var timer = observability.timeHelloQuery()) {
             Thread.sleep(100);
             result = "Hello World!";

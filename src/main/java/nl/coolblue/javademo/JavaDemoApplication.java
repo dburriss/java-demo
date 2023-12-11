@@ -9,6 +9,7 @@ public class JavaDemoApplication {
     public static void main(String[] args) {
         
         var observability = new JavaDemoObservability();
+        // example of a custom metric
         observability.applicationStarted();
         SpringApplication.run(JavaDemoApplication.class, args);
     }
