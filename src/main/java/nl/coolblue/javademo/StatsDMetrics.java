@@ -15,27 +15,27 @@ public class StatsDMetrics extends Metrics {
 
     @Override
     public void incrementCounter(String name, String... tags) {
-        client.incrementCounter(name, tags);
+        client.incrementCounter(format(name), tags);
     }
 
     @Override
     public void incrementCounter(String name, int amount, String... tags) {
-        client.count(name, amount, tags);
+        client.count(format(name), amount, tags);
     }
 
     @Override
     public void gauge(String name, double value, String... tags) {
-        client.gauge(name, value, tags);
+        client.gauge(format(name), value, tags);
     }
 
     @Override
     public void histogram(String name, double value, String... tags) {
-        client.distribution(name, value, tags);
+        client.distribution(format(name), value, tags);
     }
 
     @Override
     public void timer(String name, long elapsedTime, String... tags) {
-        client.distribution(name, elapsedTime, tags);
+        client.distribution(format(name), elapsedTime, tags);
     }
 
     @Override

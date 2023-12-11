@@ -37,7 +37,13 @@ public abstract class TagBuilder {
                 this.result = "failure";
         }
 
-        public static String clean(final String input) {
+        /**
+         * Formats the input string to a valid tag value.
+         * 
+         * @param input The input string to format.
+         * @return The formatted string.
+         */
+        public static String format(final String input) {
             
             // Remove leading numbers and special characters
             String cleanedInput = input.replaceAll("^[^a-zA-Z0-9]*", "");
@@ -62,7 +68,7 @@ public abstract class TagBuilder {
         
         @Override
         public TagBuilder withTag(String tag, String value) {
-            tags.add(clean(tag) + ":" + clean(value));
+            tags.add(format(tag) + ":" + format(value));
             return this;
         }
 

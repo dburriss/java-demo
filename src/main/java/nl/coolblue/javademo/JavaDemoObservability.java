@@ -7,13 +7,13 @@ import org.slf4j.LoggerFactory;
 
 public class JavaDemoObservability {
     static String domain = "demo";
-    static String app = "java-demo";
+    static String app = "JavaDemo";
     private final MonitoringEvents monitoringEvents;
     private final String env;
     private final String version;
 
     public JavaDemoObservability() {
-        var ns = String.format("%s.%s", domain, app);
+        var ns = Metrics.format(String.format("%s.%s", domain, app));
         StatsDClient statsDClient = new NonBlockingStatsDClientBuilder()
             .prefix(ns)
             .hostname("localhost")
@@ -48,7 +48,7 @@ public class JavaDemoObservability {
         
         // send metrics
         monitoringEvents.getMetrics().event("Java Demo app started", "Running in prod", tags);
-        monitoringEvents.getMetrics().histogram("app_started", 1L, tags);
+        monitoringEvents.getMetrics().histogram("appStarted", 1L, tags);
         
         // send log
         monitoringEvents.getLogger().info("Java Demo app starting!!!");

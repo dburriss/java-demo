@@ -41,9 +41,10 @@ public abstract class Metrics {
      * result is disposed.
      */
     public TimerDisposable startTimer(String name, String... tags) {
-        throwIfArgumentsInvalid(name, tags);
+        var metricName = format(name);
+        throwIfArgumentsInvalid(metricName, tags);
 
-        return new TimerDisposable(this, name, tags);
+        return new TimerDisposable(this, metricName, tags);
     }
 
     private void throwIfArgumentsInvalid(String name, String[] tags) {
@@ -59,6 +60,35 @@ public abstract class Metrics {
         if (Arrays.stream(tags).anyMatch(Objects::isNull)) {
             throw new IllegalArgumentException("Tag cannot be null.");
         }
+    }
+
+    /**
+     * Formats the input string to a valid metric value.
+     *
+     * @param input The input string to format.
+     * @return The formatted string.
+     */
+    public static String format(final String input) {
+
+        // Remove leading numbers and special characters
+        String cleanedInput = input.replaceAll("^[^a-zA-Z0-9]*", "");
+
+        // Remove trailing special characters
+        cleanedInput = cleanedInput.replaceAll("[^a-zA-Z0-9]*$", "");
+
+        // Remove special characters (except numbers, dash, underscore, period, and space)
+        cleanedInput = cleanedInput.replaceAll("[^a-zA-Z0-9-_. ]", "");
+
+        // Convert camel case to snake case
+        cleanedInput = cleanedInput.replaceAll("([a-z])([A-Z])", "$1_$2");
+
+        // Lowercase the input
+        cleanedInput = cleanedInput.toLowerCase();
+
+        // Convert spaces and dash to snake case
+        cleanedInput = cleanedInput.replaceAll("[ -]", "_");
+
+        return cleanedInput;
     }
 
     public static class TimerDisposable implements AutoCloseable {
